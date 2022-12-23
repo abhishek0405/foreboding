@@ -7,7 +7,8 @@ import scissor from '../components/props/scissor.png'
 import scissor_new from '../components/props/scissor_new.png'
 import PresentRoom from "../components/PresentRoom"
 import Bag from './Bag';
-
+import LaptopImg from '../components/props/laptop.png'
+import Computer  from './Computer';
 const Present = () => {
  const [items, setItems] = useState([]);
  const handleAddItem = (item) => {
@@ -55,8 +56,9 @@ const Present = () => {
       </button> */}
      
      </div>
-     
+     <Computer image={LaptopImg}></Computer>
     </>
+    
     
   );
 };
