@@ -22,7 +22,7 @@ const customStyles = {
       position: 'absolute',
       overflowX : 'hidden',
       overflowY : 'hidden',
-      border : 'none'
+      outline : 'none'
       
       
       
