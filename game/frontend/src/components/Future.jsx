@@ -5,7 +5,7 @@ import React from 'react';
 import {useState, useEffect} from 'react'
 import Modal from 'react-modal';
 
-import { future_bg, skeleton, diary, opendiary, key, key_tag, openparchment, parchroll } from "../assets";
+import { future_bg, skeleton, diary, opendiary, key, key_tag, openparchment, parchroll, paper_ball, open_paperball } from "../assets";
 
 
 const customStyles = {
@@ -42,14 +42,11 @@ function Future () {
     const [modalIsOpen, setIsOpen] = React.useState(false);
     const [modalOneIsOpen, setOneIsOpen] = React.useState(false);
     const [modalTwoIsOpen, setTwoIsOpen] = React.useState(false);
+    const [modalThreeIsOpen, setThreeIsOpen] = React.useState(false);
     let subtitle;
 
 
-    useEffect(() => {
-        alert("welcome to the future. there was a deadly virus outbreak and countless people have lost their life. you are in your laboratory, thankfully alive. you just figured a way to communicate with your past self and give hints to save the world. after all, it was you who created this deadly virus in the first place. good luck.")
-        
-      }, []);
-
+   
 
       
 
@@ -103,6 +100,26 @@ function Future () {
 
 
 
+
+
+
+  function openModalThree(e) {
+    e.preventDefault()
+    console.log("hello")
+      setThreeIsOpen(true);
+  }
+  function afterOpenModalThree() {
+      // references are now sync'd and can be accessed.
+      subtitle.style.color = '#f00';
+  }
+
+  function closeModalThree() {
+
+      setThreeIsOpen(false);
+  }
+
+
+
       function MouseOver(event) {
         event.target.style.cursor = 'pointer';
       }
@@ -127,7 +144,7 @@ function Future () {
 
 
         <div onMouseOver={MouseOver} onMouseOut={MouseOut} onClick={openModal}>
-            <h1 style={{color : 'rgba(0, 0, 0, 1)', position : 'absolute', top : '450px', left : '950px', msUserSelect : 'none', MozUserSelect: "none",
+            <h1 style={{color : 'rgba(0, 0, 0, 1)', position : 'absolute', top : '420px', left : '950px', msUserSelect : 'none', MozUserSelect: "none",
 WebkitUserSelect: "none"}} ><img src={diary} style={{width : '100px', height : '10px'}}  alt="" /></h1>
         </div>
         
@@ -150,7 +167,7 @@ WebkitUserSelect: "none"}} ><img src={diary} style={{width : '100px', height : '
 
 
         <div onMouseOver={MouseOver} onMouseOut={MouseOut} onClick={openModalOne}>
-            <h1 style={{color : 'rgba(0, 0, 0, 1)', position : 'absolute', top : '540px', left : '700px', msUserSelect : 'none', MozUserSelect: "none",
+            <h1 style={{color : 'rgba(0, 0, 0, 1)', position : 'absolute', top : '470px', left : '550px', msUserSelect : 'none', MozUserSelect: "none",
 WebkitUserSelect: "none"}} ><img src={key} style={{width : '100px', height : '10px'}}  alt="" /></h1>
         </div>
         
@@ -175,7 +192,7 @@ WebkitUserSelect: "none"}} ><img src={key} style={{width : '100px', height : '10
 
 
         <div onMouseOver={MouseOver} onMouseOut={MouseOut} onClick={openModalTwo}>
-            <h1 style={{color : 'rgba(0, 0, 0, 1)', position : 'absolute', top : '630px', left : '200px', msUserSelect : 'none', MozUserSelect: "none",
+            <h1 style={{color : 'rgba(0, 0, 0, 1)', position : 'absolute', top : '570px', left : '200px', msUserSelect : 'none', MozUserSelect: "none",
 WebkitUserSelect: "none"}} ><img src={parchroll} style={{width : '80px', height : '30px'}}  alt="" /></h1>
         </div>
         
@@ -188,6 +205,34 @@ WebkitUserSelect: "none"}} ><img src={parchroll} style={{width : '80px', height 
                className={'bg-discount-gradient'}
            >
            <img src={openparchment} alt="" style={{width: '100%'}} />
+            </Modal>
+
+           </div> 
+
+
+
+
+
+
+
+
+           <div className='login-modal'>
+
+
+        <div onMouseOver={MouseOver} onMouseOut={MouseOut} onClick={openModalThree}>
+            <h1 style={{color : 'rgba(0, 0, 0, 1)', position : 'absolute', top : '650px', left : '1450px', msUserSelect : 'none', MozUserSelect: "none",
+WebkitUserSelect: "none"}} ><img src={paper_ball} style={{width : '80px', height : '30px'}}  alt="" /></h1>
+        </div>
+        
+        <Modal
+               isOpen={modalThreeIsOpen}
+               
+               onRequestClose={closeModalThree}
+               style={customStyles}
+               contentLabel="Example Modal"
+               className={'bg-discount-gradient'}
+           >
+           <img src={open_paperball} alt="" style={{width: '100%'}} />
             </Modal>
 
            </div>  
