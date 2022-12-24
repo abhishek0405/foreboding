@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState  ,useEffect, useRef} from 'react';
 import './PresentRoomStyles.css'
+import Document from '../components/props/Document.png'
 const Computer = ({ image }) => {
+  
   const [isModelOpen, setIsModelOpen] = useState(false);
   const [password, setPassword] = useState('');
+  const [passwordStatus, setPasswordStatus] = useState('pending');
   const [error, setError] = useState('');
+  
 
   const handleKeyPress = (event) => {
     const key = event.key;
@@ -20,9 +24,11 @@ const Computer = ({ image }) => {
 
   const handleModelSubmit = () => {
     if (password === '0000') {
+      setPasswordStatus('success');
       // Load the document
       setError('');
     } else {
+      setPasswordStatus('error');
       setError('Invalid password');
     }
   };
@@ -30,8 +36,9 @@ const Computer = ({ image }) => {
   return (
     <div className="computer" >
       <img src={image} alt="computer" onClick={() => setIsModelOpen(true)} />
-      {isModelOpen && (
+      {isModelOpen  && (passwordStatus==='pending' || passwordStatus==='error') && (
         <div className="computer__model">
+            <span>Enter Password..</span>
           <div className="computer__keypad">
             <button onClick={() => setPassword(password + '1')}>1</button>
             <button onClick={() => setPassword(password + '2')}>2</button>
@@ -56,6 +63,20 @@ const Computer = ({ image }) => {
           </div>
         </div>
       )}
+      {isModelOpen  && passwordStatus==='success' && (
+        <div className="computer__model">
+            <div className='computer__keypad'>
+            <img src={Document}></img>
+            <div className="computer__actions">
+            <button onClick={handleModelClose}>Close</button>
+            </div>
+            
+          </div>
+        
+        
+    </div>
+      )}
+      
     </div>
   );
             }
