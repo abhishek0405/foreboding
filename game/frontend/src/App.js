@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
-import { Landing, Present, Future } from './components';
+import { Landing, Present, Future, Danger } from './components';
 import { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
@@ -47,8 +47,22 @@ function App() {
               }
             />
 
+          <Route
+              exact
+              path="/danger"
+              element={
+                <>
+                  <Danger />
+                </>
+              }
+            />
+
 
           </Routes>
+
+          
+
+
 
 
 
