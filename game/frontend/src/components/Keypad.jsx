@@ -25,23 +25,30 @@ const Keypad = ({ image,onPasswordCorrect }) => {
       <img src={image} alt="keypad" onClick={() => setIsModelOpen(true)} />
       {isModelOpen && (
         <div className="keypad__model">
-          <div>
-            Enter the password to unlock the document.
-          </div>
-          <input
-            type="text"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-          />
-           
-          <button onClick={() => checkPassword()}>
-            Check Password
-          </button>
+         
+         
+           {(passwordStatus === 'pending' || passwordStatus==='error') && (
+            <div>
+             <div>
+             Enter the password to unlock the document.
+           </div>
+          
+           <input
+             type="text"
+             value={password}
+             onChange={(event) => setPassword(event.target.value)}
+           />
+           <br></br>
+              <button onClick={() => checkPassword()}>
+              Check Password
+            </button>
+            </div>
+            
+          )}
+          
           {passwordStatus === 'success' && (
             <div>
-              The password is correct! Here is the document:
-              <br />
-              <a href="/path/to/document.pdf">Document</a>
+              Lockers Unlocked
             </div>
           )}
           {passwordStatus === 'error' && (

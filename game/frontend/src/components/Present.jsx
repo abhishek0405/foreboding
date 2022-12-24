@@ -17,9 +17,22 @@ const Present = () => {
     setItems([...items, item]);
   };
   const handleAddItemToBag = (item) => {
-    
-    setItems([...items, item]);
+    const itemExists = items.find((i)=>i.name===item.name)
+    if(!itemExists){
+      setItems([...items, item]);
+    }
+   
   };
+  const handleRemoveFromBag = (itemName)=>{
+    alert("hi")
+    setItems(items.filter(function(_item){
+      alert(_item.name)
+      return _item.name !== itemName
+    }))
+  }
+  // const onDragStartHandler = (event,keyType)=>{
+  //   event.dataTransfer.setData("keyType",keyType)
+  // }
   return (
     <>
     <div className='room'>
@@ -86,7 +99,7 @@ const Present = () => {
         //   size: { width: 300, height: 300 },
         //   image: computer
         // }
-      ]} onAddItemToBag={handleAddItemToBag}
+      ]} onAddItemToBag={handleAddItemToBag} onRemoveItemFromBag = {handleRemoveFromBag}
       
       
     />
