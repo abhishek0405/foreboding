@@ -1,17 +1,30 @@
 import React, { useState } from 'react';
 import './PresentRoomStyles.css'
-const PresentRoom = ({ backgroundImage, objects, onAddItemToBag }) => {
+import Keypad from './Keypad';
+const PresentRoom = ({ backgroundImage, lockers, onAddItemToBag }) => {
     const [zoomedObject, setZoomedObject] = useState(null);
+    const [isPasswordCorrect, setIsPasswordCorrect] = useState(false);
+    function handlePasswordCorrect() {
+      
+      setIsPasswordCorrect(true);
+    }
     const handleObjectDoubleClick = (event, index) => {
         // Add the object to the bag
-        console.log(objects[index])
-        onAddItemToBag(objects[index]);
+        console.log(lockers[index])
+        onAddItemToBag(lockers[index]);
       };
-  
+      const handleLockerClick = ()=>{
+        
+      }
+      
     return (
+      <>
+      <Keypad onPasswordCorrect={handlePasswordCorrect} image="https://thumbs.dreamstime.com/b/alphabet-keypad-parking-meter-pay-machine-also-has-words-cancel-ok-them-numbers-49482354.jpg"></Keypad>
       <div className="room">
+         
         <img src={backgroundImage} alt="room" className="room__image" />
-        {objects.map((object, index) => (
+        
+        {lockers.map((object, index) => (
           <div
             key={index}
             className={`room__object ${index === zoomedObject ? 'zoomed' : ''}`}
@@ -21,17 +34,20 @@ const PresentRoom = ({ backgroundImage, objects, onAddItemToBag }) => {
               width: object.size.width,
               height: object.size.height
             }}
-            onClick={() => {
-              setZoomedObject(index === zoomedObject ? null : index);
-            }}
-            onDoubleClick={(event) => handleObjectDoubleClick(event, index)}
+            onClick={isPasswordCorrect ? (()=>{setZoomedObject(index === zoomedObject ? null : index);}) : () => {}}
+            // s
+            // onDoubleClick={(event) => handleObjectDoubleClick(event, index)}
           >
+            
             <img src={object.image} alt="object" className="room__object-image" />
           </div>
         ))}
         
+        
       </div>
+      </>
     );
+    
   };
 
 export default PresentRoom;
