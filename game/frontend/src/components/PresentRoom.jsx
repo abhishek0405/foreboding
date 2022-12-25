@@ -15,6 +15,9 @@ import key_593 from '../components/props/key_593.png'
 import key_862 from '../components/props/key_862.png'
 import red_siren from '../components/props/red_siren.png'
 import green_siren from '../components/props/green_siren.png'
+//import { Redirect } from 'react-router-dom';
+
+import { useNavigate } from "react-router-dom";
 const PresentRoom = ({ backgroundImage, lockers, onAddItemToBag,onItemRemoveFromBag }) => {
     const [zoomedObject, setZoomedObject] = useState(null);
     const [isPasswordCorrect, setIsPasswordCorrect] = useState(false);
@@ -25,6 +28,9 @@ const PresentRoom = ({ backgroundImage, lockers, onAddItemToBag,onItemRemoveFrom
     const [sirenImg,setSirenImg] = useState(red_siren)
     const [chosenKeys,setChosenKeys] = useState([])
     const [lockOpen, setLockOpen] = useState(false);
+    const [shouldRedirect, setShouldRedirect] = useState(false);
+
+    const navigate = useNavigate();
     const handleModelClose = () => {
       setIsModelOpen(false);
      
@@ -33,14 +39,21 @@ const PresentRoom = ({ backgroundImage, lockers, onAddItemToBag,onItemRemoveFrom
       event.preventDefault();
     };
     const onDropHandler = (event) => {
-      event.preventDefault();
+      //event.preventDefault();
       //alert(event.dataTransfer.getData("keyType"))
+      setShouldRedirect(true);
+      // if (shouldRedirect) {
+      //   return <Redirect to="/some/path" />;
+      // }
       const keyType = event.dataTransfer.getData("keyType");
       if (keyType === "correctKey") {
+        navigate('/danger');
         setLockOpen(true);
         //check this
         onItemRemoveFromBag('key117');
         //can redirect to new room directly
+        
+
       }
       
     };

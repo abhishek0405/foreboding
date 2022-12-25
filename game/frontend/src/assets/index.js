@@ -10,7 +10,8 @@ import danger_room from './danger_room.png'
 import red_flask from './red_flask.png';
 import blue_flask from './blue_flask.png'
 import green_flask from './green_flask.png'
+import virus from './virus.png'
 
 export {
-    future_bg, skeleton, diary, opendiary, key, key_tag, openparchment, parchroll, danger_room, red_flask, blue_flask, green_flask
+    future_bg, skeleton, diary, opendiary, key, key_tag, openparchment, parchroll, danger_room, red_flask, blue_flask, green_flask, virus
 }
