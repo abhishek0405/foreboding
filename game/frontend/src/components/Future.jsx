@@ -144,7 +144,7 @@ function Future () {
 
 
         <div onMouseOver={MouseOver} onMouseOut={MouseOut} onClick={openModal}>
-            <h1 style={{color : 'rgba(0, 0, 0, 1)', position : 'absolute', top : '420px', left : '950px', msUserSelect : 'none', MozUserSelect: "none",
+            <h1 style={{color : 'rgba(0, 0, 0, 1)', position : 'absolute', top : '390px', left : '900px', msUserSelect : 'none', MozUserSelect: "none",
 WebkitUserSelect: "none"}} ><img src={diary} style={{width : '100px', height : '10px'}}  alt="" /></h1>
         </div>
         
@@ -220,8 +220,8 @@ WebkitUserSelect: "none"}} ><img src={parchroll} style={{width : '80px', height 
 
 
         <div onMouseOver={MouseOver} onMouseOut={MouseOut} onClick={openModalThree}>
-            <h1 style={{color : 'rgba(0, 0, 0, 1)', position : 'absolute', top : '650px', left : '1450px', msUserSelect : 'none', MozUserSelect: "none",
-WebkitUserSelect: "none"}} ><img src={paper_ball} style={{width : '80px', height : '30px'}}  alt="" /></h1>
+            <h1 style={{color : 'rgba(0, 0, 0, 1)', position : 'absolute', top : '330px', left : '1150px', msUserSelect : 'none', MozUserSelect: "none",
+WebkitUserSelect: "none"}} ><img src={paper_ball} style={{width : '60px', height : '20px'}}  alt="" /></h1>
         </div>
         
         <Modal
