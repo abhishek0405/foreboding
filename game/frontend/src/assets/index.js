@@ -8,7 +8,13 @@ import openparchment from './openparchment.jpg'
 import parchroll from './parchroll.png'
 import paper_ball from './paper_ball.png'
 import open_paperball from './open_paperball.jpg'
+import danger_room from './danger_room.png'
+import red_flask from './red_flask.png';
+import blue_flask from './blue_flask.png'
+import green_flask from './green_flask.png'
+import virus from './virus.png'
 
 export {
-    future_bg, skeleton, diary, opendiary, key, key_tag, openparchment, parchroll, paper_ball, open_paperball
+    future_bg, skeleton, diary, opendiary, key, key_tag, openparchment, parchroll, paper_ball, open_paperball, danger_room, red_flask, blue_flask, green_flask, virus
+
 }
