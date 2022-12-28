@@ -4,6 +4,8 @@ import React from 'react';
 
 import {useState, useEffect} from 'react'
 import Modal from 'react-modal';
+import InventoryBagFuture from './InventoryCardBagFuture';
+import axios from 'axios'
 
 import { future_bg, skeleton, diary, opendiary, key, key_tag, openparchment, parchroll, paper_ball, open_paperball } from "../assets";
 
@@ -28,6 +30,27 @@ const customStyles = {
       
     },
   };
+
+  const customStylesFour = {
+    content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)',
+      minWidth: '25%',
+      minHeight: '40%',
+      background :'rgba(255,255,255,1)',
+      position: 'absolute',
+      overflowX : 'hidden',
+      overflowY : 'hidden',
+      outline : 'none'
+      
+      
+      
+    },
+  };
   
 
   Modal.setAppElement('#root');
@@ -43,6 +66,11 @@ function Future () {
     const [modalOneIsOpen, setOneIsOpen] = React.useState(false);
     const [modalTwoIsOpen, setTwoIsOpen] = React.useState(false);
     const [modalThreeIsOpen, setThreeIsOpen] = React.useState(false);
+    const [modalFourIsOpen, setFourIsOpen] = React.useState(false);
+    const [hint, setHint] = useState('Hint')
+    const [selectedOption, setSelectedOption] = React.useState('');
+
+    
     let subtitle;
 
 
@@ -120,13 +148,89 @@ function Future () {
 
 
 
+  function openModalFour(e) {
+    e.preventDefault()
+    setFourIsOpen(true)
+  }
+  function afterOpenModalFour() {
+      // references are now sync'd and can be accessed.
+      subtitle.style.color = '#f00';
+  }
+
+  function closeModalFour() {
+
+      setFourIsOpen(false);
+  }
+
+
+
       function MouseOver(event) {
         event.target.style.cursor = 'pointer';
       }
       function MouseOut(event){
         event.target.style.background="";
       }
+
+      const handleChange = (event) => {
+        setSelectedOption(event.target.value);
+        console.log(event.target.value)
+      }
           
+      const handleUse = (e, tokenId, owner ) => {
+        console.log('tokenId: ', tokenId)
+      console.log('owner: ', owner)
+      
+      var d = {}
+        d.tokenId = tokenId
+        d.user = owner
+      
+      if(tokenId !== null && owner !== null){
+
+        axios.post('http://localhost:5000/check/addUsedToken', d, {
+        withCredentials: true
+      })
+      .then(res=> {console.log(res.data)
+          if(res.data.status === 'error'){
+              console.log('here')
+              
+          }
+          else{
+            console.log('succesfully added')
+          }
+      
+      })
+      .catch(err=>console.log(err.response.data));
+
+      }
+
+        
+        
+        
+        openModalFour(e)
+      }
+
+      const handleHint = (e) => {
+        e.preventDefault()
+        closeModalFour()
+        console.log(selectedOption)
+        if(selectedOption === 'option1'){
+          setHint('Use the diary to provide file password to the Present player')
+        }
+        else if(selectedOption === 'option2'){
+          setHint('Use the cipher to provide password to the Present player')
+          
+
+        }
+        else if(selectedOption === 'option3'){
+          setHint('Give the correct key number to the Present player')
+          
+
+        }
+        else if(selectedOption === 'option4'){
+          setHint('Use the poem to provide the correct order of chemicals to pour on virus to present player')
+        }
+
+      }
 
 
     return (
@@ -236,6 +340,55 @@ WebkitUserSelect: "none"}} ><img src={paper_ball} style={{width : '60px', height
             </Modal>
 
            </div>  
+           <InventoryBagFuture handleUse = {handleUse} />
+           <div style={{
+            position: 'absolute',
+            top: 650,
+            left: 0,
+          
+            minWidth: '200px',
+            height: '50px',
+            backgroundColor: 'red',
+            opacity : 0.4,
+            color : 'white'
+          }}>
+            {hint}
+
+
+
+            <Modal
+               isOpen={modalFourIsOpen}
+               
+               onRequestClose={closeModalFour}
+               style={customStylesFour}
+               contentLabel="Example Modal"
+               className={'bg-discount-gradient'}
+           >
+           <h1>Select the status of the Present player: </h1>
+
+           <form onSubmit={handleHint}>
+
+
+           <select value={selectedOption} onChange={handleChange}>
+           <option value="option1">Didn't do anything yet</option>
+            <option value="option2">Unlocked file on computer</option>
+            <option value="option3">Unlocked lockers</option>
+            
+            <option value="option4">Entered danger room</option>
+          </select>
+
+              <br />
+              <button className='btn-black' type='submit'>Get hint</button>
+           </form>
+           
+
+            </Modal>
+          </div>
+
+
+
+
+
         </>
     )
 

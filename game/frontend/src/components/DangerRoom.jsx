@@ -1,5 +1,6 @@
 
 
+import axios from 'axios';
 import React from 'react';
 
 import {useState, useEffect} from 'react'
@@ -8,6 +9,7 @@ import Modal from 'react-modal';
 import { future_bg, skeleton, diary, opendiary, key, key_tag, openparchment, parchroll, danger_room, red_flask, blue_flask, green_flask, virus } from "../assets";
 
 import DangerBag from './DangerBag';
+import InventoryBag from './InventoryCardBag';
 
 
 const customStyles = {
@@ -51,10 +53,45 @@ function DangerRoom () {
     const [isVisibleRed, setIsVisibleRed] = useState(true);
     const [isVisibleBlue, setIsVisibleBlue] = useState(true);
     const [isVisibleGreen, setIsVisibleGreen] = useState(true);
+    const [isVirusDestroyed, setVirusDestroyed] = useState(false)
+    const [hint, setHint] = useState('Hint')
 
     const expectedOrder = ['red', 'blue', 'green'];
     let droppedChemicals = 0;
 
+
+
+    const handleUse = (tokenId, owner) => {
+      console.log('tokenId: ', tokenId)
+      console.log('owner: ', owner)
+      if(isVirusDestroyed === false){
+        setHint('select the flasks and put them in your bag. pour in correct order on the virus.')
+      }
+      var d = {}
+        d.tokenId = tokenId
+        d.user = owner
+      
+      if(tokenId !== null && owner !== null){
+
+        axios.post('http://localhost:5000/check/addUsedToken', d, {
+        withCredentials: true
+      })
+      .then(res=> {console.log(res.data)
+          if(res.data.status === 'error'){
+              console.log('here')
+              
+          }
+          else{
+            console.log('succesfully added')
+          }
+      
+      })
+      .catch(err=>console.log(err.response.data));
+
+      }
+
+      
+    }
     
 
 
@@ -78,26 +115,14 @@ function DangerRoom () {
     const onDragOverHandler = (event) => {
       event.preventDefault();
     };
-    // const onDropHandler = (event) => {
-    //   event.preventDefault();
-    //   //alert(event.dataTransfer.getData("keyType"))
-    //   const keyType = event.dataTransfer.getData("keyType");
-    //   if (keyType === "correctKey") {
-    //     setLockOpen(true);
-    //     //check this
-    //     onItemRemoveFromBag('key117');
-    //     //can redirect to new room directly
-    //   }
-      
-    // };
+    
 
     const handleObjectDoubleClick = (event, img, name) => {
-      // Add the object to the bag
-      //console.log(lockers[index])
+      
       const item = {}
       item.image = img;
       item.name=name;
-      //setChosenKeys([name,...chosenKeys])
+      
       handleAddItemToBag(item);
     };
 
@@ -149,8 +174,21 @@ function DangerRoom () {
 
     return (
         <>
+       
         <div style={{overflowX : 'hidden', overflow: 'hidden' ,position : 'fixed'}}>
         <img src={danger_room} alt=""  />
+        <div style={{
+      position: 'absolute',
+      left: 0,
+      bottom: 150,
+      minWidth: '200px',
+      height: '50px',
+      backgroundColor: 'red',
+      opacity : 0.4,
+      color : 'white'
+    }}>
+      {hint}
+    </div>
         
         </div>
 
@@ -310,6 +348,7 @@ WebkitUserSelect: "none"}} >
             droppedChemicals += 1;
             if(droppedChemicals === 3){
               openModalOne(event)
+              setVirusDestroyed(true)
             }
           }}
           onDragOver={event => {
@@ -325,7 +364,8 @@ WebkitUserSelect: "none"}} >
 
            </div>  
            <DangerBag items={items} />
-        </>
+           <InventoryBag handleUse={handleUse} />
+        </> 
     )
 
 

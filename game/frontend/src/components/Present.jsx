@@ -8,11 +8,15 @@ import scissor_new from '../components/props/scissor_new.png'
 import locker from '../components/props/locker.png'
 import PresentRoom from "../components/PresentRoom"
 import Bag from './Bag';
+import InventoryBagPresent from './InventoryCardBagPresent';
 import LaptopImg from '../components/props/laptop.png'
 import Computer  from './Computer';
 import Keypad from './Keypad';
 const Present = () => {
  const [items, setItems] = useState([]);
+ const [hint, setHint] = useState('Hint')
+ const [isDocRetrieved, setIsDocRetrieved] = useState(false)
+ const [isLockersUnlocked, setIsLockersUnlocked] = useState(false)
  const handleAddItem = (item) => {
     setItems([...items, item]);
   };
@@ -35,7 +39,10 @@ const Present = () => {
   // }
   return (
     <>
+    
+   
     <div className='room'>
+    
     <PresentRoom
       backgroundImage="https://wallpaperaccess.com/full/758571.jpg"
       lockers={[
@@ -103,15 +110,17 @@ const Present = () => {
       
       
     />
+     
    
     <Bag items={items} />
+    
     
       {/* <button className="app__button" onClick={() => handleAddItem({ name: 'Item 2', image: scissor })}>
         Add Item
       </button> */}
      
      </div>
-     <Computer image={LaptopImg}></Computer>
+     
     
     </>
     
