@@ -6,6 +6,7 @@ import {useState, useEffect} from 'react'
 import Navbar from './Navbar';
 import CoinbaseWalletSDK from '@coinbase/wallet-sdk'
 import Web3 from 'web3'
+import { landing_bg } from '../assets';
 
 function Landing () {
 
@@ -56,7 +57,8 @@ const web3 = new Web3(ethereum)
     return (
         <>
             <Navbar />
-            <div className='bg-black'>
+            <div className='landing-page'>
+            <img src={landing_bg} alt=""  />
                 <div className="foreboding-text">Foreboding</div>
                 <button className="wallet-button" onClick={handleConnect}>Connect Your Wallet</button>
 
