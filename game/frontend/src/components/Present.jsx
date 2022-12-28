@@ -1,4 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect,useContext} from 'react';
+// import { useLocation } from 'react-router-dom';
+// import {
+//   useLocation,
+//   useNavigate,
+//   useParams
+// } from "react-router-dom";
+
+// import { withRouter } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import SocketContext from "./SocketContext";
 import './PresentRoomStyles.css'
 import chemical from '../components/props/chemical.png'
 import computer from '../components/props/computer.png'
@@ -11,8 +21,15 @@ import Bag from './Bag';
 import LaptopImg from '../components/props/laptop.png'
 import Computer  from './Computer';
 import Keypad from './Keypad';
-const Present = () => {
- const [items, setItems] = useState([]);
+import Chat from "./Chat";
+const Present = (props) => {
+ 
+  const location = useLocation();
+  const [items, setItems] = useState([]);
+  const [username, setUsername] = useState("");
+  const [room, setRoom] = useState("");
+  const [isSocketSet,setisSocket] = useState(false)
+  const socket = useContext(SocketContext);
  const handleAddItem = (item) => {
     setItems([...items, item]);
   };
@@ -23,6 +40,15 @@ const Present = () => {
     }
    
   };
+
+  useEffect(() => {
+    //const data = location.state.data;
+    //console.log(props.location.state)
+    //console.log("props",location.state)
+    //alert(props.location.state)
+    console.log("socket") 
+    console.log(socket)
+  }, []);
   const handleRemoveFromBag = (itemName)=>{
     alert("hi")
     setItems(items.filter(function(_item){
@@ -112,11 +138,20 @@ const Present = () => {
      
      </div>
      <Computer image={LaptopImg}></Computer>
-    
+     <div>
+      <h1>Present</h1>
+      {socket ? (
+       
+        <p>Socket connected {socket}</p>
+      ) : (
+        <p>Socket not connected  {socket}</p>
+      )}
+    </div>
+      
     </>
     
     
   );
 };
 
-export default Present
+export default(Present)

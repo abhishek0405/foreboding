@@ -1,17 +1,60 @@
 
 
 import React from 'react';
-
+import { useNavigate } from 'react-router-dom'
+import {
+  BrowserRouter as Router,
+  Link
+}  from "react-router-dom";
 import {useState, useEffect} from 'react'
 import Navbar from './Navbar';
 import CoinbaseWalletSDK from '@coinbase/wallet-sdk'
 import Web3 from 'web3'
+import './PresentRoomStyles.css'
+import Chat from "./Chat";
+// import "../components/Chat.css"
+import io from "socket.io-client";
+import SocketContext from "./SocketContext";
 
+
+// const socket = io.connect("http://localhost:3001");
 function Landing () {
 
-
-    
+    const navigate = useNavigate();
+    // const { socket } = useSocket();
     const [walletAddress, setWalletAddress] = useState("Get Started");
+    const [isModelOpen, setIsModelOpen] = useState(false);
+    const [username, setUsername] = useState("");
+    const [room, setRoom] = useState("");
+    const [showChat, setShowChat] = useState(false);
+    const [socket, setSocket] = useState(null);
+    useEffect(() => {
+        const socketObj = io.connect("http://localhost:3001");
+        setSocket(socketObj);
+      }, []);
+    const joinRoom = () => {
+       
+        if (username !== "" && room !== "") {
+         socket.emit("join_room", room);
+         
+          setShowChat(true);
+          const obj = {
+            name:"abhishek",
+            age:21
+          }
+          //navigate('/present', { state: { data:obj } });
+      
+        //console.log(socket)
+
+        }
+        
+      };
+
+      const handleModelClose = () => {
+        setIsModelOpen(false);
+      };
+    
+      
 
 const APP_NAME = 'My Awesome App'
 const APP_LOGO_URL = 'https://example.com/logo.png'
@@ -55,15 +98,62 @@ const web3 = new Web3(ethereum)
 
     return (
         <>
+        <SocketContext.Provider value={socket}>
+
             <Navbar />
             <div className='bg-black'>
                 <div className="foreboding-text">Foreboding</div>
                 <button className="wallet-button" onClick={handleConnect}>Connect Your Wallet</button>
 
-                <a href="/present" style={{position : 'absolute', top : '80%', left : '30%', fontSize : '30px', }}>Present</a>
-                <a href="/future" style={{position : 'absolute', top : '80%', left : '65%', fontSize : '30px', }}>Future</a>
+                <a href="#" style={{position : 'absolute', top : '80%', left : '30%', fontSize : '30px', }} onClick={()=>{setIsModelOpen(true)}}>Present</a>
+                <a href="#" style={{position : 'absolute', top : '80%', left : '65%', fontSize : '30px', }} onClick={()=>{setIsModelOpen(true)}}>Future</a>
 
             </div>
+       
+    <div className='chat_popup'>
+    {isModelOpen  && (
+        <div className="chat__model">
+           
+           <div className="App">
+      {!showChat ? (
+        <div className="joinChatContainer">
+          
+          <input
+            type="text"
+           
+            placeholder="John..."
+            onChange={(event) => {
+              
+              setUsername(event.target.value);
+            }}
+          />
+          <input
+            type="text"
+            placeholder="Room ID..."
+            onChange={(event) => {
+              setRoom(event.target.value);
+            }}
+          />
+          <button onClick={joinRoom}>Join A Room</button>
+        </div>
+      ) : (
+        
+        
+      <Link to="/present">Play</Link>
+   
+       
+        // <Chat socket={socket} username={username} room={room} />
+      )}
+     
+    </div>
+            
+          </div>
+         
+    )}  
+    </div>
+    </SocketContext.Provider>
+
+     
             
 
         
@@ -74,4 +164,4 @@ const web3 = new Web3(ethereum)
 }
 
 
-export default Landing 
+export default Landing
