@@ -196,7 +196,7 @@ WebkitUserSelect: "none"}} >
 
 
         <div onMouseOver={MouseOver} onMouseOut={MouseOut} >
-            <h1 style={{color : 'rgba(0, 0, 0, 1)', position : 'absolute', top : '315px', left : '1200px', msUserSelect : 'none', MozUserSelect: "none",
+            <h1 style={{color : 'rgba(0, 0, 0, 1)', position : 'absolute', top : '265px', left : '1000px', msUserSelect : 'none', MozUserSelect: "none",
 WebkitUserSelect: "none"}} >
   
   {
@@ -229,12 +229,12 @@ WebkitUserSelect: "none"}} >
 
 
         <div onMouseOver={MouseOver} onMouseOut={MouseOut} >
-                    <h1 style={{color : 'rgba(0, 0, 0, 1)', position : 'absolute', top : '550px', left : '0px', msUserSelect : 'none', MozUserSelect: "none",
+                    <h1 style={{color : 'rgba(0, 0, 0, 1)', position : 'absolute', top : '260px', left : '120px', msUserSelect : 'none', MozUserSelect: "none",
         WebkitUserSelect: "none"}} >
           
           {
             isVisibleGreen && (
-              <img src={green_flask} style={{width : '80px', height : '50px'}}  alt=""  onDoubleClick={(event) => 
+              <img src={green_flask} style={{width : '50px', height : '40px'}}  alt=""  onDoubleClick={(event) => 
                 {
                   handleObjectDoubleClick(event, green_flask,'green_flask');
                   setIsVisibleGreen(false)
