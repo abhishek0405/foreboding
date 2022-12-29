@@ -36,6 +36,7 @@ const PresentRoom = ({ backgroundImage, lockers, onAddItemToBag,onItemRemoveFrom
     const [shouldRedirect, setShouldRedirect] = useState(false);
     const [isLockerOpen, setIsLockerOpen] = useState(false)
     const [hint, setHint] =useState('Hint')
+    const [laptopCorrect, isLaptopCorrect] = useState(false)
 
 
 
@@ -56,11 +57,11 @@ const PresentRoom = ({ backgroundImage, lockers, onAddItemToBag,onItemRemoveFrom
       if(isLockerOpen === true){
         setHint('Choose the correct key from the lockers. Get this information from the Future player')
       }
-      else if(isLockerOpen === false && isPasswordCorrect === true){
+      else if(isLockerOpen === false && laptopCorrect === true){
         console.log('hi')
         setHint('Type in the correct locker password to unlock them. Get the cipher text from Future player')
       }
-      else if(isPasswordCorrect === false ){
+      else if(laptopCorrect === false ){
         setHint('Use the password given in a diary in the Future side.')
       }
     
@@ -129,6 +130,12 @@ const PresentRoom = ({ backgroundImage, lockers, onAddItemToBag,onItemRemoveFrom
       const handleLockerClick = ()=>{
         
       }
+
+      const handleCorrect = (e) => {
+
+        isLaptopCorrect(true)
+
+      }
       
     return (
       <>
@@ -144,7 +151,7 @@ const PresentRoom = ({ backgroundImage, lockers, onAddItemToBag,onItemRemoveFrom
 
         <img src={backgroundImage} alt="room" className="room__image" />
         
-<Computer />
+<Computer handleCorrect = {handleCorrect} />
       
         <div style={{
       position: 'absolute',

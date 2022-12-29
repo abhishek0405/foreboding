@@ -2,12 +2,57 @@ import React, { useState  ,useEffect, useRef} from 'react';
 import './PresentRoomStyles.css'
 import Document from '../components/props/Document.png'
 import image from './props/laptop.png'
-const Computer = () => {
+import Modal from 'react-modal'
+
+
+const customStyles = {
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)',
+    minWidth: '25%',
+    minHeight: '40%',
+    background :'rgba(255,255,255,1)',
+    position: 'absolute',
+    overflowX : 'hidden',
+    overflowY : 'hidden',
+    zIndex : 4
+    
+  },
+};
+
+
+Modal.setAppElement('#root');
+
+
+const Computer = (props) => {
   
   const [isModelOpen, setIsModelOpen] = useState(false);
   const [password, setPassword] = useState('');
   const [passwordStatus, setPasswordStatus] = useState('pending');
   const [error, setError] = useState('');
+  const [modalIsOpen, setIsOpen] = useState(false);
+  let subtitle
+
+
+  function openModal(e, description, valid, tokenId ) {
+    e.preventDefault()
+    console.log("hello")
+      setIsOpen(true);
+      
+  }
+  function afterOpenModal1() {
+      // references are now sync'd and can be accessed.
+      subtitle.style.color = '#f00';
+  }
+
+  function closeModal() {
+
+      setIsOpen(false);
+  }
   
 
   const handleKeyPress = (event) => {
@@ -28,6 +73,7 @@ const Computer = () => {
     console.log('yo')
     if (password === '0411') {
       setPasswordStatus('success');
+      props.handleCorrect()
       // Load the document
       setError('');
     } else {
@@ -47,49 +93,74 @@ const Computer = () => {
       
       color : 'white'
     }} >
-      <img src={image} alt="computer" onClick={() => setIsModelOpen(true)} />
-      {isModelOpen  && (passwordStatus==='pending' || passwordStatus==='error') && (
-        <div className="computer__model">
-            <span>Enter Password..</span>
-          <div className="computer__keypad">
-            <button onClick={() => setPassword(password + '1')}>1</button>
-            <button onClick={() => setPassword(password + '2')}>2</button>
-            <button onClick={() => setPassword(password + '3')}>3</button>
-            <button onClick={() => setPassword(password + '4')}>4</button>
-            <button onClick={() => setPassword(password + '5')}>5</button>
-            <button onClick={() => setPassword(password + '6')}>6</button>
-            <button onClick={() => setPassword(password + '7')}>7</button>
-            <button onClick={() => setPassword(password + '8')}>8</button>
-            <button onClick={() => setPassword(password + '9')}>9</button>
-            <button onClick={() => setPassword(password + '0')}>0</button>
-          </div>
-          <div className="computer__password">
-            {password.split('').map((char, index) => (
-              <span key={index}>*</span>
-            ))}
-          </div>
-          {error && <div className="computer__error">{error}</div>}
-          <div className="computer__actions">
-            <button onClick={() => {setIsModelOpen(false);
-    setPassword('');
-    setError('');}}>Close</button>
-            <button onClick={handleModelSubmit}>Submit</button>
-          </div>
-        </div>
-      )}
-      {isModelOpen  && passwordStatus==='success' && (
-        <div className="computer__model">
+      <img src={image} alt="computer" onClick={openModal} />
+      <div className='login-modal'>
+
+    <Modal
+        isOpen={modalIsOpen}
+        
+        onRequestClose={closeModal}
+        style={customStyles}
+        contentLabel="Example Modal"
+        className={'bg-discount-gradient parent'}
+    >
+
+
+                    <span>Enter Password..</span>
+           
+           
+            
+           <div className="computer__keypad">
+           
+           
+             <button onClick={() => setPassword(password + '1')}>1</button>
+             <button onClick={() => setPassword(password + '2')}>2</button>
+             <button onClick={() => setPassword(password + '3')}>3</button>
+             <button onClick={() => setPassword(password + '4')}>4</button>
+             <button onClick={() => setPassword(password + '5')}>5</button>
+             <button onClick={() => setPassword(password + '6')}>6</button>
+             <button onClick={() => setPassword(password + '7')}>7</button>
+             <button onClick={() => setPassword(password + '8')}>8</button>
+             <button onClick={() => setPassword(password + '9')}>9</button>
+             <button onClick={() => setPassword(password + '0')}>0</button>
+           </div>
+           
+           <div className="computer__password">
+             {password.split('').map((char, index) => (
+               <span key={index}>*</span>
+             ))}
+           </div>
+           {error && <div className="computer__error">{error}</div>}
+
+           <div className='computer__actions'>
+           <button onClick={() => {setIsModelOpen(false);
+     setPassword('');
+     setError('');}}>Clear</button>
+              <button onClick={handleModelSubmit}>Submit</button>
+           </div>
+
+           {modalIsOpen  && passwordStatus==='success' && (
+        <div >
             <div className='computer__keypad'>
             <img src={Document}></img>
             <div className="computer__actions">
-            <button onClick={handleModelClose}>Close</button>
+            <button onClick={closeModal}>Close</button>
             </div>
             
           </div>
-        
-        
+              
     </div>
       )}
+          
+            
+
+    </Modal>
+
+</div>
+      
+      
+        
+    
       
     </div>
   );
