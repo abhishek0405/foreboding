@@ -95,8 +95,9 @@ const InventoryBagFuture = (props) => {
         e.preventDefault()
         if(props.handleUse){
             await props.handleUse(e, tokenId, acc)
-            getData()
+            
         }
+        getData()
 
         
       }

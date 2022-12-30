@@ -91,6 +91,7 @@ const InventoryBagPresent = (props) => {
         if(props.handleUse){
             props.handleUse(e, tokenId, acc)
         }
+        getData()
         
       }
 
@@ -109,88 +110,88 @@ const InventoryBagPresent = (props) => {
 
     
 
+      
+        
 
+      async function getData(){
+        const data = []
+        const finalData = []
+        await provider.send("eth_requestAccounts", []);
+        var signer = await provider.getSigner();
+        const contract = new ethers.Contract('0x9eeF83ebA708c760b9D8f761835a47B9ff200722', forebodingABI, signer);
+
+        const accounts =await window.ethereum.request({
+            method: "eth_requestAccounts",
+          });
+          setAcc(accounts[0])
+          console.log(accounts[0])
+         
+        const currTokens = await contract._tokenIds();
+        
+        for(var i = 0; i < parseInt(currTokens._hex, 16); i++){
+
+
+                var own = await contract._tokenOwner(i)
+                
+                if(check(accounts[0], own)){
+                    
+                    var forSale = await contract._marketPlace(i)
+                    console.log('for sale: ', forSale)
+                    if(parseInt(forSale._hex,16) === 0){
+                        var currData = await contract.tokenURI(i);
+               
+                        console.log(currData)
+                        var response = await fetch(currData);
+                        if(!response.ok)
+                            throw new Error(response.statusText);
+                           
+                        var json = await response.json();
+                        
+                        Object.assign(json, {key : i})
+                        Object.assign(json, {tokenId : i})
+
+                        data.push(json)
+                       
+
+                    }
+                }
+
+            
+                
+            
+        }
+        fetch('http://localhost:5000/check/getUsedTokens?user='+accounts[0], {
+            credentials : 'include'
+        }).then(
+            response => {return response.json()}
+        
+        ).then(
+            dataRec => {
+                console.log(dataRec.data)
+                setAllTokens(dataRec)
+                //console.log(typeof dataRec)
+                for(var i = 0; i < data.length; i++){
+                    console.log(parseInt(data[i].valid))
+                    console.log('occurence: ', countOccurrences(dataRec.data, data[i].tokenId))
+
+                    if(countOccurrences(dataRec.data, data[i].tokenId) < parseInt(data[i].valid)){
+                        finalData.push(data[i])
+                    }
+                }
+                setIpfsData(finalData)
+                setLoading(false)
+                
+            }
+        )
+        
+        
+
+    }
     
 
     useEffect( () => {
 
 
-        
-
-        async function getData(){
-            const data = []
-            const finalData = []
-            await provider.send("eth_requestAccounts", []);
-            var signer = await provider.getSigner();
-            const contract = new ethers.Contract('0x9eeF83ebA708c760b9D8f761835a47B9ff200722', forebodingABI, signer);
-
-            const accounts =await window.ethereum.request({
-                method: "eth_requestAccounts",
-              });
-              setAcc(accounts[0])
-              console.log(accounts[0])
-             
-            const currTokens = await contract._tokenIds();
-            
-            for(var i = 0; i < parseInt(currTokens._hex, 16); i++){
-
-
-                    var own = await contract._tokenOwner(i)
-                    
-                    if(check(accounts[0], own)){
-                        
-                        var forSale = await contract._marketPlace(i)
-                        console.log('for sale: ', forSale)
-                        if(parseInt(forSale._hex,16) === 0){
-                            var currData = await contract.tokenURI(i);
-                   
-                            console.log(currData)
-                            var response = await fetch(currData);
-                            if(!response.ok)
-                                throw new Error(response.statusText);
-                               
-                            var json = await response.json();
-                            
-                            Object.assign(json, {key : i})
-                            Object.assign(json, {tokenId : i})
-
-                            data.push(json)
-                           
-
-                        }
-                    }
-
-                
-                    
-                
-            }
-            fetch('http://localhost:5000/check/getUsedTokens?user='+accounts[0], {
-                credentials : 'include'
-            }).then(
-                response => {return response.json()}
-            
-            ).then(
-                dataRec => {
-                    console.log(dataRec.data)
-                    setAllTokens(dataRec)
-                    //console.log(typeof dataRec)
-                    for(var i = 0; i < data.length; i++){
-                        console.log(parseInt(data[i].valid))
-                        console.log('occurence: ', countOccurrences(dataRec.data, data[i].tokenId))
-
-                        if(countOccurrences(dataRec.data, data[i].tokenId) < parseInt(data[i].valid)){
-                            finalData.push(data[i])
-                        }
-                    }
-                    setIpfsData(finalData)
-                    setLoading(false)
-                    
-                }
-            )
-            
-            
-
-        }
         getData()
         
         
