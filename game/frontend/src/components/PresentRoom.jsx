@@ -15,6 +15,11 @@ import key_593 from '../components/props/key_593.png'
 import key_862 from '../components/props/key_862.png'
 import red_siren from '../components/props/red_siren.png'
 import green_siren from '../components/props/green_siren.png'
+import axios from 'axios'
+
+import LaptopImg from '../components/props/laptop.png'
+import Computer  from './Computer';
+import InventoryBagPresent from './InventoryCardBagPresent';
 //import { Redirect } from 'react-router-dom';
 
 import { useNavigate } from "react-router-dom";
@@ -29,6 +34,58 @@ const PresentRoom = ({ backgroundImage, lockers, onAddItemToBag,onItemRemoveFrom
     const [chosenKeys,setChosenKeys] = useState([])
     const [lockOpen, setLockOpen] = useState(false);
     const [shouldRedirect, setShouldRedirect] = useState(false);
+    const [isLockerOpen, setIsLockerOpen] = useState(false)
+    const [hint, setHint] =useState('Hint')
+
+
+
+
+
+
+    const handleUse = (e, tokenId, owner ) => {
+      console.log('tokenId: ', tokenId)
+    console.log('owner: ', owner)
+    
+    var d = {}
+      d.tokenId = tokenId
+      d.user = owner
+      console.log(isLockerOpen)
+      console.log(isPasswordCorrect)
+
+
+      if(isLockerOpen === true){
+        setHint('Choose the correct key from the lockers. Get this information from the Future player')
+      }
+      else if(isLockerOpen === false && isPasswordCorrect === true){
+        console.log('hi')
+        setHint('Type in the correct locker password to unlock them. Get the cipher text from Future player')
+      }
+      else if(isPasswordCorrect === false ){
+        setHint('Use the password given in a diary in the Future side.')
+      }
+    
+    if(tokenId !== null && owner !== null){
+
+      axios.post('http://localhost:5000/check/addUsedToken', d, {
+      withCredentials: true
+    })
+    .then(res=> {console.log(res.data)
+        if(res.data.status === 'error'){
+            console.log('here')
+            
+        }
+        else{
+          console.log('succesfully added')
+        }
+    
+    })
+    .catch(err=>console.log(err.response.data));
+
+    }
+
+      
+      
+    }
 
     const navigate = useNavigate();
     const handleModelClose = () => {
@@ -51,14 +108,13 @@ const PresentRoom = ({ backgroundImage, lockers, onAddItemToBag,onItemRemoveFrom
         setLockOpen(true);
         //check this
         onItemRemoveFromBag('key117');
-        //can redirect to new room directly
-        
-
+       
       }
       
     };
     function handlePasswordCorrect() {
       setSirenImg(green_siren)
+      setIsLockerOpen(true)
       setIsPasswordCorrect(true);
     }
     const handleObjectDoubleClick = (event, img, name) => {
@@ -76,7 +132,8 @@ const PresentRoom = ({ backgroundImage, lockers, onAddItemToBag,onItemRemoveFrom
       
     return (
       <>
-      
+
+    
       <Keypad onPasswordCorrect={handlePasswordCorrect} image="https://thumbs.dreamstime.com/b/alphabet-keypad-parking-meter-pay-machine-also-has-words-cancel-ok-them-numbers-49482354.jpg"></Keypad>
       <div className="room">
       {lockOpen===false?
@@ -84,7 +141,24 @@ const PresentRoom = ({ backgroundImage, lockers, onAddItemToBag,onItemRemoveFrom
       :
       <img></img>} 
       <img src={sirenImg} class='room__object'style={{height:'20px',width:'20px',top:'310px',left:'708px'}}></img>
+
         <img src={backgroundImage} alt="room" className="room__image" />
+        
+<Computer />
+      
+        <div style={{
+      position: 'absolute',
+      top: 650,
+      left: 0,
+     
+      minWidth: '200px',
+      height: '50px',
+      backgroundColor: 'red',
+      opacity : 0.4,
+      color : 'white'
+    }}>
+      {hint}
+    </div>
         
         {lockers.map((object, index) => (
         
@@ -192,6 +266,9 @@ const PresentRoom = ({ backgroundImage, lockers, onAddItemToBag,onItemRemoveFrom
         
         
       </div>
+      <InventoryBagPresent handleUse = {handleUse} />
+      
+    
       </>
     );
     

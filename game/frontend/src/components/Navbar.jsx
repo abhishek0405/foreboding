@@ -71,6 +71,27 @@ const web3 = new Web3(ethereum)
           </li>
 
 
+          <li
+            key={"marketplace"}
+            className={`font-poppins font-normal cursor-pointer text-[16px] ${
+              active === "Home" ? "text-white" : "text-dimWhite"
+            } mr-10`}
+            onClick={() => setActive("Marketplace")}
+          >
+            <a href={`/marketplace`}>{"Marketplace"}</a>
+          </li>
+
+          <li
+            key={"myCollection"}
+            className={`font-poppins font-normal cursor-pointer text-[16px] ${
+              active === "My Collection" ? "text-white" : "text-dimWhite"
+            } mr-10`}
+            onClick={() => setActive("myCollection")}
+          >
+            <a href={`/myCollection`}>{"My Collection"}</a>
+          </li>
+
+
           
           <li
             key={"getStarted"}

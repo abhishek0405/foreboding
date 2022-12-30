@@ -16,6 +16,7 @@ import Chat from "./Chat";
 import io from "socket.io-client";
 import SocketContext from "./SocketContext";
 
+import { landing_bg } from '../assets';
 
 // const socket = io.connect("http://localhost:3001");
 function Landing () {
@@ -101,7 +102,8 @@ const web3 = new Web3(ethereum)
         <SocketContext.Provider value={socket}>
 
             <Navbar />
-            <div className='bg-black'>
+            <div className='landing-page'>
+            <img src={landing_bg} alt=""  />
                 <div className="foreboding-text">Foreboding</div>
                 <button className="wallet-button" onClick={handleConnect}>Connect Your Wallet</button>
 

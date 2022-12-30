@@ -1,7 +1,8 @@
 import React, { useState  ,useEffect, useRef} from 'react';
 import './PresentRoomStyles.css'
 import Document from '../components/props/Document.png'
-const Computer = ({ image }) => {
+import image from './props/laptop.png'
+const Computer = () => {
   
   const [isModelOpen, setIsModelOpen] = useState(false);
   const [password, setPassword] = useState('');
@@ -17,13 +18,15 @@ const Computer = ({ image }) => {
   };
 
   const handleModelClose = () => {
+    console.log('hey')
     setIsModelOpen(false);
     setPassword('');
     setError('');
   };
 
   const handleModelSubmit = () => {
-    if (password === '0000') {
+    console.log('yo')
+    if (password === '0411') {
       setPasswordStatus('success');
       // Load the document
       setError('');
@@ -34,7 +37,16 @@ const Computer = ({ image }) => {
   };
 
   return (
-    <div className="computer" >
+    <div className="computer" style={{
+      position: 'absolute',
+      top: 550,
+      left: 700,
+     
+      minWidth: '200px',
+      height: '50px',
+      
+      color : 'white'
+    }} >
       <img src={image} alt="computer" onClick={() => setIsModelOpen(true)} />
       {isModelOpen  && (passwordStatus==='pending' || passwordStatus==='error') && (
         <div className="computer__model">
@@ -58,7 +70,9 @@ const Computer = ({ image }) => {
           </div>
           {error && <div className="computer__error">{error}</div>}
           <div className="computer__actions">
-            <button onClick={handleModelClose}>Close</button>
+            <button onClick={() => {setIsModelOpen(false);
+    setPassword('');
+    setError('');}}>Close</button>
             <button onClick={handleModelSubmit}>Submit</button>
           </div>
         </div>
