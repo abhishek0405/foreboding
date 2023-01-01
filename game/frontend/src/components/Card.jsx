@@ -16,11 +16,13 @@ const Card = ({ title, description, imageUrl, price, tokenId }) => {
   async function handleBuy(e){
 
     e.preventDefault()
-
+    console.log("buying")
     await provider.send("eth_requestAccounts", []);
     var signer = await provider.getSigner();
+    console.log(signer)
     const contract = new ethers.Contract('0x9eeF83ebA708c760b9D8f761835a47B9ff200722', forebodingABI, signer);
-    
+    console.log(tokenId)
+    console.log(price)
     const a = await contract.buy(parseInt(tokenId), {value: price})
     console.log(a)
 

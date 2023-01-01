@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState,useContext } from 'react';
 import './PresentRoomStyles.css'
 import Keypad from './Keypad';
+import SocketContext from "./SocketContext";
 import locker_117 from '../components/props/117_locker.png'
 import locker_204 from '../components/props/204_locker.png'
 import locker_359 from '../components/props/359_locker.png'
@@ -20,10 +21,13 @@ import axios from 'axios'
 import LaptopImg from '../components/props/laptop.png'
 import Computer  from './Computer';
 import InventoryBagPresent from './InventoryCardBagPresent';
+import Chat from "./Chat";
+import phone from "../assets/phone.png"
 //import { Redirect } from 'react-router-dom';
 
 import { useNavigate } from "react-router-dom";
-const PresentRoom = ({ backgroundImage, lockers, onAddItemToBag,onItemRemoveFromBag }) => {
+const PresentRoom = ({ username,room,backgroundImage, lockers, onAddItemToBag,onItemRemoveFromBag }) => {
+  const socket = useContext(SocketContext);
     const [zoomedObject, setZoomedObject] = useState(null);
     const [isPasswordCorrect, setIsPasswordCorrect] = useState(false);
     const [isModelOpen, setIsModelOpen] = useState(false);
@@ -37,6 +41,7 @@ const PresentRoom = ({ backgroundImage, lockers, onAddItemToBag,onItemRemoveFrom
     const [isLockerOpen, setIsLockerOpen] = useState(false)
     const [hint, setHint] =useState('Hint')
     const [laptopCorrect, isLaptopCorrect] = useState(false)
+    const [showChat,setShowChat] = useState(false);
 
 
 
@@ -105,7 +110,7 @@ const PresentRoom = ({ backgroundImage, lockers, onAddItemToBag,onItemRemoveFrom
       // }
       const keyType = event.dataTransfer.getData("keyType");
       if (keyType === "correctKey") {
-        navigate('/danger');
+        navigate('/danger',{state: { username: username,room:room}});
         setLockOpen(true);
         //check this
         onItemRemoveFromBag('key117');
@@ -140,9 +145,10 @@ const PresentRoom = ({ backgroundImage, lockers, onAddItemToBag,onItemRemoveFrom
     return (
       <>
 
-    
+     
       <Keypad onPasswordCorrect={handlePasswordCorrect} image="https://thumbs.dreamstime.com/b/alphabet-keypad-parking-meter-pay-machine-also-has-words-cancel-ok-them-numbers-49482354.jpg"></Keypad>
       <div className="room">
+       
       {lockOpen===false?
       <img src={locked_lock} class='room__object'style={{height:'20px',width:'20px',top:'470px',left:'440px',zIndex:2}} onDragOver={onDragOverHandler} onDrop={onDropHandler}></img>
       :
@@ -152,6 +158,7 @@ const PresentRoom = ({ backgroundImage, lockers, onAddItemToBag,onItemRemoveFrom
         <img src={backgroundImage} alt="room" className="room__image" />
         
 <Computer handleCorrect = {handleCorrect} />
+
       
         <div style={{
       position: 'absolute',
@@ -270,11 +277,23 @@ const PresentRoom = ({ backgroundImage, lockers, onAddItemToBag,onItemRemoveFrom
         )}
 
     
-        
+      
         
       </div>
+      
       <InventoryBagPresent handleUse = {handleUse} />
       
+     
+      
+      {showChat ? (
+        <div style={{position:'absolute',left:"83%",top:"350px",zIndex:5}}>
+      <Chat socket={socket} username={username} room={room} />
+      </div>
+         
+       
+      ) : (
+        <img src={phone} onClick = {()=>{setShowChat(true)}}style={{position:"absolute",left:"450px",width:"30px",height:"30px",top:"525px"}}></img>
+      )}
     
       </>
     );

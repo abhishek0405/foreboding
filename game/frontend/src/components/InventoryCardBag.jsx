@@ -2,7 +2,7 @@ import {React, useState, useEffect } from 'react';
 import forebodingABI from "../contracts/ForebodingABI.json"
 import {ethers} from "ethers"
 import SellCard from './SellCard'
-
+import './PresentRoomStyles.css'
 import {Web3Storage} from 'web3.storage'
 import Modal from 'react-modal';
 
@@ -12,20 +12,22 @@ const provider = new ethers.providers.Web3Provider(window.ethereum);
 
 const customStyles = {
     content: {
+    
       top: '50%',
       left: '50%',
       right: 'auto',
       bottom: 'auto',
       marginRight: '-50%',
       transform: 'translate(-50%, -50%)',
-      minWidth: '25%',
+      minWidth: '55%',
       minHeight: '40%',
       background :'rgba(0,0,0,0)',
       position: 'absolute',
       overflowX : 'hidden',
       overflowY : 'hidden',
-      
+     
     },
+    
   };
   
 
@@ -50,6 +52,9 @@ const InventoryBag = (props) => {
     let subtitle;
 
     const [loading, setLoading] = useState(true)
+    const handleModelClose = () => {
+        setIsOpen(false)
+       };
 
     function check(x, y){
         for(var i = 0; i < 42; i++){
@@ -205,9 +210,9 @@ const InventoryBag = (props) => {
 
 
     <>
-    <div className='login-modal'>
+    {/* <div className='login-modal'>  */}
 
-    <Modal
+     <Modal
         isOpen={modalIsOpen}
         
         onRequestClose={closeModal}
@@ -216,7 +221,7 @@ const InventoryBag = (props) => {
         className={'bg-discount-gradient parent'}
     >
         
-            <div className='child'>
+            <div className='child' style={{zIndex:3}}>
                 {text} <br />
                 <button className='btn-black' onClick={handleClick}>Use</button>  
             </div>
@@ -225,8 +230,21 @@ const InventoryBag = (props) => {
         
 
     </Modal>
+   {/* <div className="computer">
+        {modalIsOpen &&(
+            <>
+            <div className="computer__model">
+                {text} <br />
+                <button className='btn-black' onClick={handleClick}>Use</button>  
+                <div className="computer__actions">
+                    <button  onClick={handleModelClose}>Close</button>
+                </div>
+            </div>
+            </>
+        )}
+     </div> */}
 
-</div>
+{/* </div> */}
          {(loading === true) ? (<p>Loading</p>) : (
 
                 <>
@@ -240,8 +258,9 @@ const InventoryBag = (props) => {
                             
                             <div className="inventory-bag">
                                 {ipfsData.map(hintCard => (
-                                <div key={hintCard.tokenId} className="hint-card" onClick={(event) => openModal(event, hintCard.description, hintCard.valid, hintCard.tokenId)}>
+                                <div key={hintCard.tokenId} className="hint-card" onClick={(event) => {openModal(event, hintCard.description, hintCard.valid, hintCard.tokenId)}}>
                                     {hintCard.title}
+                                    
                                     
                                 </div>
                                 ))}

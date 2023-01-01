@@ -1,12 +1,5 @@
 import React, { useState,useEffect,useContext} from 'react';
-// import { useLocation } from 'react-router-dom';
-// import {
-//   useLocation,
-//   useNavigate,
-//   useParams
-// } from "react-router-dom";
 
-// import { withRouter } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import SocketContext from "./SocketContext";
 import './PresentRoomStyles.css'
@@ -23,16 +16,25 @@ import LaptopImg from '../components/props/laptop.png'
 import Computer  from './Computer';
 import Keypad from './Keypad';
 import Chat from "./Chat";
-const Present = (props) => {
+import theme from "../assets/theme.mp3"
  
-  const location = useLocation();
-  const [items, setItems] = useState([]);
-  const [username, setUsername] = useState("");
-  const [room, setRoom] = useState("");
-  const [isSocketSet,setisSocket] = useState(false)
-  const socket = useContext(SocketContext);
+ 
+  // const [isSocketSet,setisSocket] = useState(false)
+  // const socket = useContext(SocketContext);
 const Present = () => {
- const [items, setItems] = useState([]);
+  const socket = useContext(SocketContext);
+  
+  console.log("socket here",socket);
+  const location = useLocation();
+  // console.log(location)
+  const data = location.state;
+  const username = data.username;
+  const room = data.room;
+
+  const [items, setItems] = useState([]);
+  // const [username, setUsername] = useState("");
+  // const [room, setRoom] = useState("");
+ 
  const [hint, setHint] = useState('Hint')
  const [isDocRetrieved, setIsDocRetrieved] = useState(false)
  const [isLockersUnlocked, setIsLockersUnlocked] = useState(false)
@@ -70,8 +72,10 @@ const Present = () => {
     
    
     <div className='room'>
-    
+    <audio src={theme} loop="true" autoplay="true"></audio>
     <PresentRoom
+      username={username}
+      room={room}
       backgroundImage="https://wallpaperaccess.com/full/758571.jpg"
       lockers={[
         // {
@@ -146,25 +150,20 @@ const Present = () => {
       {/* <button className="app__button" onClick={() => handleAddItem({ name: 'Item 2', image: scissor })}>
         Add Item
       </button> */}
+    
      
      </div>
-     <Computer image={LaptopImg}></Computer>
-     {/* <div>
+     {/* <Computer image={LaptopImg}></Computer> */}
+     <div>
       <h1>Present</h1>
-      {socket ? (
-       
-        <p>Socket connected {socket}</p>
-      ) : (
-        <p>Socket not connected  {socket}</p>
-      )}
+      
     </div>
-       */}
+      
      
     
     </>
     
     
   )};
-};
 
-export default(Present)
+export default Present;

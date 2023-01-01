@@ -1,15 +1,16 @@
 
 
 import React from 'react';
-
-import {useState, useEffect} from 'react'
+import { useLocation } from 'react-router-dom';
+import {useState, useEffect,useContext} from 'react'
 import Modal from 'react-modal';
 import InventoryBagFuture from './InventoryCardBagFuture';
 import axios from 'axios'
-
+import SocketContext from "./SocketContext";
 import { future_bg, skeleton, diary, opendiary, key, key_tag, openparchment, parchroll, paper_ball, open_paperball } from "../assets";
-
-
+import Chat from "./Chat";
+import theme from "../assets/theme.mp3"
+import phone from "../assets/phone.png"
 const customStyles = {
     content: {
       top: '50%',
@@ -60,7 +61,12 @@ const customStyles = {
 
 
 function Future () {
-
+  const socket = useContext(SocketContext);
+  const location = useLocation();
+  // console.log(location)
+  const data = location.state;
+  const username = data.username;
+  const room = data.room;
 
     const [modalIsOpen, setIsOpen] = React.useState(false);
     const [modalOneIsOpen, setOneIsOpen] = React.useState(false);
@@ -69,6 +75,7 @@ function Future () {
     const [modalFourIsOpen, setFourIsOpen] = React.useState(false);
     const [hint, setHint] = useState('Hint')
     const [selectedOption, setSelectedOption] = React.useState('');
+    const [showChat,setShowChat] = useState(false);
 
     
     let subtitle;
@@ -235,6 +242,7 @@ function Future () {
 
     return (
         <>
+        <audio src={theme} loop="true" autoplay="true"></audio>
         <div style={{overflowX : 'hidden', overflow: 'hidden' ,position : 'fixed'}}>
         <img src={future_bg} alt=""  />
         
@@ -387,7 +395,15 @@ WebkitUserSelect: "none"}} ><img src={paper_ball} style={{width : '60px', height
 
 
 
-
+          {showChat ? (
+        <div style={{position:'absolute',left:"83%",top:"350px",zIndex:5}}>
+      <Chat socket={socket} username={username} room={room} />
+      </div>
+         
+       
+      ) : (
+        <img src={phone} onClick = {()=>{setShowChat(true)}}style={{position:"absolute",left:"450px",width:"30px",height:"30px",top:"525px"}}></img>
+      )}
 
         </>
     )

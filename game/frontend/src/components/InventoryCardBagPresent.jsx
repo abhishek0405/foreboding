@@ -24,7 +24,7 @@ const customStyles = {
       position: 'absolute',
       overflowX : 'hidden',
       overflowY : 'hidden',
-      zIndex : 2
+      
       
     },
   };
@@ -51,6 +51,9 @@ const InventoryBagPresent = (props) => {
     let subtitle;
 
     const [loading, setLoading] = useState(true)
+    const handleModelClose = () => {
+        setIsOpen(false)
+       };
 
     function check(x, y){
         for(var i = 0; i < 42; i++){
@@ -204,7 +207,7 @@ const InventoryBagPresent = (props) => {
     <>
     <div className='login-modal'>
 
-    <Modal
+    {/* <Modal
         isOpen={modalIsOpen}
         
         onRequestClose={closeModal}
@@ -221,7 +224,24 @@ const InventoryBagPresent = (props) => {
         
         
 
-    </Modal>
+    </Modal> */}
+    
+{/*     
+     </div> */}
+
+     <div className="computer">
+        {modalIsOpen &&(
+            <>
+            <div className="computer__model">
+                {text} <br />
+                <button className='btn-black' onClick={handleClick}>Use</button>  
+                <div className="computer__actions">
+                    <button  onClick={handleModelClose}>Close</button>
+                </div>
+            </div>
+            </>
+        )}
+     </div>
 
 </div>
          {(loading === true) ? (<p>Loading</p>) : (

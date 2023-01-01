@@ -3,15 +3,15 @@
 import axios from 'axios';
 import React from 'react';
 
-import {useState, useEffect} from 'react'
+import {useState, useEffect,useContext} from 'react'
 import Modal from 'react-modal';
-
+import { useLocation } from 'react-router-dom';
 import { future_bg, skeleton, diary, opendiary, key, key_tag, openparchment, parchroll, danger_room, red_flask, blue_flask, green_flask, virus } from "../assets";
 
 import DangerBag from './DangerBag';
 import InventoryBag from './InventoryCardBag';
-
-
+import Chat from "./Chat";
+import SocketContext from "./SocketContext";
 const customStyles = {
     content: {
       top: '50%',
@@ -41,12 +41,18 @@ const customStyles = {
 
 
 function DangerRoom () {
-
+  const socket = useContext(SocketContext);
 
     const [modalIsOpen, setIsOpen] = React.useState(false);
     const [modalOneIsOpen, setOneIsOpen] = React.useState(false);
     const [modalTwoIsOpen, setTwoIsOpen] = React.useState(false);
     const [items, setItems] = useState([]);
+    const location = useLocation();
+    const username = location.state.username;
+    const room = location.state.room;
+    // const data = location.state.data;
+    console.log("danger loc")
+    console.log(location)
  
  
     let subtitle;
@@ -365,6 +371,15 @@ WebkitUserSelect: "none"}} >
            </div>  
            <DangerBag items={items} />
            <InventoryBag handleUse={handleUse} />
+           {socket ? (
+        <div style={{position:'absolute',left:"83%",top:"350px",zIndex:5}}>
+      <Chat socket={socket} username={username} room={room} />
+      </div>
+         
+       
+      ) : (
+        <></>
+      )}
         </> 
     )
 
