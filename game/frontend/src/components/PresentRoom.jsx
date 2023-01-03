@@ -292,7 +292,7 @@ const PresentRoom = ({ username,room,backgroundImage, lockers, onAddItemToBag,on
          
        
       ) : (
-        <img src={phone} onClick = {()=>{setShowChat(true)}}style={{position:"absolute",left:"450px",width:"30px",height:"30px",top:"525px"}}></img>
+         <img src={phone} onClick = {()=>{setShowChat(true)}}style={{position:"absolute",left:"450px",width:"30px",height:"30px",top:"525px"}}></img>
       )}
     
       </>

@@ -17,6 +17,7 @@
     object-fit: cover;
   }
   
+  
   .room__object {
     position: absolute;
     cursor: pointer;
@@ -24,6 +25,9 @@
     width: 100%;
     overflow-y: hidden;
   }
+  
+
+  
   
   .room__object.zoomed {
     position: fixed;
