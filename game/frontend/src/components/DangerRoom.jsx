@@ -12,6 +12,15 @@ import DangerBag from './DangerBag';
 import InventoryBag from './InventoryCardBag';
 import Chat from "./Chat";
 import SocketContext from "./SocketContext";
+import NFTABI from '../contracts/NFTABI.json'
+import {ethers} from "ethers"
+
+import {Web3Storage} from 'web3.storage'
+
+const provider = new ethers.providers.Web3Provider(window.ethereum);
+
+
+
 const customStyles = {
     content: {
       top: '50%',
@@ -46,11 +55,15 @@ function DangerRoom () {
     const [modalIsOpen, setIsOpen] = React.useState(false);
     const [modalOneIsOpen, setOneIsOpen] = React.useState(false);
     const [modalTwoIsOpen, setTwoIsOpen] = React.useState(false);
+    const [success, setSuccess] = useState('')
     const [items, setItems] = useState([]);
     const location = useLocation();
     const username = location.state.username;
     const room = location.state.room;
     // const data = location.state.data;
+    
+    const client = new Web3Storage({ token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweGFBOEQ0QzMwNmI4ZjhjNjZCMTQyN2Y3NEIzZjlDNTI2YzE0RTFDRWEiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2NjkwOTc5NDk3MjksIm5hbWUiOiJ5dXUifQ.t8HIerpToxPT9zgQzsZlAJeCWIBnZqlAaSOoZVkVUnw" })
+
     console.log("danger loc")
     console.log(location)
  
@@ -64,6 +77,25 @@ function DangerRoom () {
 
     const expectedOrder = ['red', 'blue', 'green'];
     let droppedChemicals = 0;
+
+
+    function makeFileObjects (obj, name) {
+    
+      const blob = new Blob([JSON.stringify(obj)], { type: 'application/json' })
+    
+      const files = [
+       
+        new File([blob], name)
+      ]
+      return files
+    }
+  
+    async function storeFiles (files) {
+      
+      const cid = await client.put(files)
+      console.log('stored files with cid:', cid)
+      return cid
+    }
 
 
 
@@ -152,9 +184,57 @@ function DangerRoom () {
   }
 
 
-  function openModalOne(e) {
+  async function openModalOne(e) {
     e.preventDefault()
     console.log("hello")
+    const accounts =await window.ethereum.request({
+      method: "eth_requestAccounts",
+    });
+    console.log(accounts[0])
+
+    
+    await provider.send("eth_requestAccounts", []);
+  const signer = await provider.getSigner();
+
+  const contract = new ethers.Contract('0xABC3c9cC5A0B019fb42cd00e62693446D92FaEC8', NFTABI, signer);
+
+
+    const tx1 = await contract.getAll(accounts[0]);
+    console.log(tx1)
+    var x = 0
+
+    for(var i = 0; i < tx1.length; i++){
+      if(parseInt(tx1[i]._hex, 16) !== 0){
+        x = 1
+        break
+      }
+    }
+
+    if(x === 0){
+
+      var files = makeFileObjects({
+        name : 'virus game solved',
+        solvedBy : accounts[0]
+      }, "data.json")
+      console.log(files)
+      var cid = await storeFiles(files)
+      const ipfs_url = `https://${cid}.ipfs.w3s.link/data.json`
+      console.log("content saved on: ", cid)
+  
+      
+    const tx = await contract.mint(ipfs_url, {});
+    const receipt = await tx.wait();
+    console.log(receipt.transactionHash)
+   
+    setSuccess('Congratulations you earned an NFT - beginner star!!')
+    //setSuccess(`Successfully minted new NFT with transaction hash: ${receipt.transactionHash}`);
+  
+
+    }
+
+
+    
+
       setOneIsOpen(true);
   }
   function afterOpenModalOne() {
@@ -328,6 +408,7 @@ WebkitUserSelect: "none"}} >
                className={'bg-discount-gradient'}
            >
            <h1>Congratulations! you have saved the world!</h1>
+           {success}
             </Modal>
 
 
@@ -355,6 +436,7 @@ WebkitUserSelect: "none"}} >
             if(droppedChemicals === 3){
               openModalOne(event)
               setVirusDestroyed(true)
+
             }
           }}
           onDragOver={event => {

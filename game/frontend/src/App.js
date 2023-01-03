@@ -13,6 +13,7 @@ import { useEffect, useContext } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import SocketContext from "./components/SocketContext";
 import io from "socket.io-client";
+import MyBadges from "./components/MyBadges";
 const socket = io.connect("http://localhost:3001");
 function App() {
   return (
@@ -92,6 +93,18 @@ function App() {
                   <>
                     <div className="black-background">
                       <MyCollection />
+                    </div>
+                  </>
+                }
+              />
+
+               <Route
+                exact
+                path="/myBadges"
+                element={
+                  <>
+                    <div className="black-background">
+                      <MyBadges />
                     </div>
                   </>
                 }
