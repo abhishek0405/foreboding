@@ -91,6 +91,16 @@ const web3 = new Web3(ethereum)
             <a href={`/myCollection`}>{"My Collection"}</a>
           </li>
 
+          <li
+            key={"myBadges"}
+            className={`font-poppins font-normal cursor-pointer text-[16px] ${
+              active === "My Badges" ? "text-white" : "text-dimWhite"
+            } mr-10`}
+            onClick={() => setActive("myBadges")}
+          >
+            <a href={`/myBadges`}>{"My Badges"}</a>
+          </li>
+
 
           
           <li
