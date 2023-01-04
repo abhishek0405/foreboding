@@ -9,7 +9,7 @@ import axios from 'axios'
 import SocketContext from "./SocketContext";
 import { future_bg, skeleton, diary, opendiary, key, key_tag, openparchment, parchroll, paper_ball, open_paperball } from "../assets";
 import Chat from "./Chat";
-import theme from "../assets/theme.mp3"
+import theme from "../assets/theme1.mp3"
 import phone from "../assets/phone.png"
 const customStyles = {
     content: {

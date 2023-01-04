@@ -16,7 +16,7 @@ import LaptopImg from '../components/props/laptop.png'
 import Computer  from './Computer';
 import Keypad from './Keypad';
 import Chat from "./Chat";
-import theme from "../assets/theme.mp3"
+import theme from "../assets/theme1.mp3"
  
  
   // const [isSocketSet,setisSocket] = useState(false)
