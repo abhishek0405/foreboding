@@ -12,7 +12,7 @@ const Keypad = ({ image,onPasswordCorrect }) => {
     
   };
   const checkPassword = () => {
-    if (password === 'secret') {
+    if (password ==='libsqx') {
       setPasswordStatus('success');
       onPasswordCorrect();
     } else {

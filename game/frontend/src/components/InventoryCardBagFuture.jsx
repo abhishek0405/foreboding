@@ -2,7 +2,7 @@ import {React, useState, useEffect } from 'react';
 import forebodingABI from "../contracts/ForebodingABI.json"
 import {ethers} from "ethers"
 import SellCard from './SellCard'
-
+import axios from 'axios';
 import {Web3Storage} from 'web3.storage'
 import Modal from 'react-modal';
 
@@ -20,7 +20,8 @@ const customStyles = {
       transform: 'translate(-50%, -50%)',
       minWidth: '25%',
       minHeight: '40%',
-      background :'rgba(0,0,0,0)',
+      background :'rgba(0,0,0,0.7)',
+      color:'white',
       position: 'absolute',
       overflowX : 'hidden',
       overflowY : 'hidden',
@@ -93,10 +94,32 @@ const InventoryBagFuture = (props) => {
       
       async function handleClick(e){
         e.preventDefault()
-        if(props.handleUse){
-            await props.handleUse(e, tokenId, acc)
-            
+        const body = {
+            tokenId:tokenId,
+            tokenValidCount:valid,
+            user:acc
         }
+        console.log("use body",body)
+        if(tokenId !== null){
+            const res =  await axios.post('http://localhost:5000/check/checkUsedToken', body, {
+                        withCredentials: true
+                      })
+
+            const isValid = res.data.isValid;
+            console.log("isValid",isValid)
+        
+            if(isValid){
+                if(props.handleUse){
+                    await props.handleUse(e, tokenId, acc)
+                    
+                }
+            }
+            else{
+                alert("This token usage has been exhausted")
+            }
+           
+        }
+        
         getData()
 
         

@@ -4,7 +4,7 @@ import forebodingABI from "../contracts/ForebodingABI.json"
 import {ethers} from "ethers"
 import SellCard from './SellCard'
 import Navbar from './Navbar';
-
+import axios from 'axios'
 import {Web3Storage} from 'web3.storage'
 
 import { future_bg, skeleton, diary, opendiary, key, key_tag, openparchment, parchroll, paper_ball, open_paperball, hint } from "../assets";
@@ -20,10 +20,12 @@ const MyCollection = () => {
 
     
     const [ipfsData, setIpfsData] = useState([])
+    
     let subtitle;
 
     const client = new Web3Storage({ token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweGFBOEQ0QzMwNmI4ZjhjNjZCMTQyN2Y3NEIzZjlDNTI2YzE0RTFDRWEiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2NjkwOTc5NDk3MjksIm5hbWUiOiJ5dXUifQ.t8HIerpToxPT9zgQzsZlAJeCWIBnZqlAaSOoZVkVUnw" })
     const [loading, setLoading] = useState(true)
+    const [account,setAccount] = useState(null);
 
     function check(x, y){
         for(var i = 0; i < 42; i++){
@@ -56,6 +58,7 @@ const MyCollection = () => {
             const accounts =await window.ethereum.request({
                 method: "eth_requestAccounts",
               });
+            setAccount(accounts[0]);
               //console.log(check(accounts[0], accounts[0]))
               //setAcc(accounts[0])
               //console.log(typeof accounts[0])
@@ -102,11 +105,80 @@ const MyCollection = () => {
                     
                 
             }
-            setIpfsData(data)
-            setLoading(false)
+            // const newData = data.map(obj=>{
+            //     const tokenId = obj.tokenId;
+            //     const tokenValidCount = obj.valid;
+            //     const user =  accounts[0];
+            //     const body = {
+            //         tokenId:tokenId,
+            //         tokenValidCount:tokenValidCount,
+            //         user:user
+            //     }
+            //     if(tokenId !== null){
+
+            //         axios.post('http://localhost:5000/check/checkUsedToken', body, {
+            //         withCredentials: true
+            //       })
+            //       .then(res=> {console.log(res.data)
+                      
+            //         //   return res.data.isValid;
+            //         if(res.data.isValid===true){
+            //             // setIpfsData([...ipfsData],obj)
+            //             // setLoading(false)
+            //             //console.log("ipfs data",data)
+            //             const newObj = {...obj,isValid:true};
+                       
+            //             // setIpfsData([...ipfsData,newObj])
+            //             return ({...obj,isValid:true})
             
+            //         }
+            //         else{
+            //             const newObj = {...obj,isValid:false};
+            //             // setIpfsData([...ipfsData,newObj])
+            //             return ({...obj,isValid:false})
+            //         }
+                    
+                     
+                  
+            //       })
+            //       .catch(err=>{
+            //         console.log(err.response.data)
+            //         return ({...obj,isValid:false})
+            //     });
+                    
+            //       }
+
+            // })
+        let newData = []
+        for(const obj of data){
+                const tokenId = obj.tokenId;
+                const tokenValidCount = obj.valid;
+                const user =  accounts[0];
+                const body = {
+                    tokenId:tokenId,
+                    tokenValidCount:tokenValidCount,
+                    user:user
+                }
+                if(tokenId !== null){
+                    const res =  await axios.post('http://localhost:5000/check/checkUsedToken', body, {
+                                withCredentials: true
+                              })
+
+                    const isValid = res.data.isValid;
+                    newData.push({...obj,isValid:isValid});
+                }
 
         }
+        
+            
+        setIpfsData(newData)
+        
+        setLoading(false)
+        console.log("new",newData);
+        console.log("ipfs2",ipfsData)
+
+        }
+        
         getData()
         
         
@@ -137,11 +209,17 @@ const MyCollection = () => {
                 {
                     
                     ipfsData.map(d => {
-                                    
-                        return(
-                            
-                          <SellCard  title={d.title} description={d.description} imageUrl={hint} tokenId= {d.tokenId} key={d.key}  />
-                       )
+                    //   return (
+                    //      <SellCard  title={d.title} description={d.description} imageUrl={hint} tokenId= {d.tokenId} key={d.key}  />
+                    //   )
+                         
+                    // {d.isValid ? ( <SellCard  title={d.title} description={d.description} imageUrl={hint} tokenId= {d.tokenId} key={d.key}  />):(<></>)}
+                     return(
+                        <>
+                        {d.isValid &&  <SellCard  title={d.title} description={d.description} imageUrl={hint} tokenId= {d.tokenId} key={d.key}  />}
+                        {!d.isValid && <></>}
+                        </>
+                     )  
 
                       })
                 }

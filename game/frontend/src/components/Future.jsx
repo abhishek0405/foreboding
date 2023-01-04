@@ -221,20 +221,36 @@ function Future () {
         closeModalFour()
         console.log(selectedOption)
         if(selectedOption === 'option1'){
-          setHint('Use the diary to provide file password to the Present player')
+          const newHint = 'Use the diary to provide file password to the Present player';
+          if(hint===newHint){
+            return;
+          }
+          setHint(newHint);
         }
         else if(selectedOption === 'option2'){
-          setHint('Use the cipher to provide password to the Present player')
+          const newHint = 'Use the cipher to provide password to the Present player';
+          if(hint===newHint){
+            return;
+          }
+          setHint(newHint);
           
 
         }
         else if(selectedOption === 'option3'){
-          setHint('Give the correct key number to the Present player')
+          const newHint ='Give the correct key number to the Present player';
+          if(hint===newHint){
+            return;
+          }
+          setHint(newHint);
           
 
         }
         else if(selectedOption === 'option4'){
-          setHint('Use the poem to provide the correct order of chemicals to pour on virus to present player')
+          const newHint='Use the poem to provide the correct order of chemicals to pour on virus to present player';
+          if(hint===newHint){
+            return;
+          }
+          setHint(newHint);
         }
 
       }

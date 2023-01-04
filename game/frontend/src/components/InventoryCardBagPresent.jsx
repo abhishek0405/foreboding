@@ -5,7 +5,7 @@ import SellCard from './SellCard'
 
 import {Web3Storage} from 'web3.storage'
 import Modal from 'react-modal';
-
+import axios from 'axios';
 const provider = new ethers.providers.Web3Provider(window.ethereum);
 
 
@@ -89,11 +89,34 @@ const InventoryBagPresent = (props) => {
       }
 
       
-      function handleClick(e){
+      async function handleClick(e){
         e.preventDefault()
-        if(props.handleUse){
-            props.handleUse(e, tokenId, acc)
+        const body = {
+            tokenId:tokenId,
+            tokenValidCount:valid,
+            user:acc
         }
+        console.log("use body",body)
+        if(tokenId !== null){
+            const res =  await axios.post('http://localhost:5000/check/checkUsedToken', body, {
+                        withCredentials: true
+                      })
+
+            const isValid = res.data.isValid;
+            console.log("isValid",isValid)
+        
+            if(isValid){
+                if(props.handleUse){
+                    props.handleUse(tokenId, acc)
+                    
+                }
+            }
+            else{
+                alert("This token usage has been exhausted")
+            }
+           
+        }
+        
         getData()
         
       }

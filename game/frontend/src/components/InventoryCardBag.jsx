@@ -5,6 +5,7 @@ import SellCard from './SellCard'
 import './PresentRoomStyles.css'
 import {Web3Storage} from 'web3.storage'
 import Modal from 'react-modal';
+import axios from 'axios';
 
 const provider = new ethers.providers.Web3Provider(window.ethereum);
 
@@ -19,9 +20,10 @@ const customStyles = {
       bottom: 'auto',
       marginRight: '-50%',
       transform: 'translate(-50%, -50%)',
-      minWidth: '55%',
+      minWidth: '25%',
       minHeight: '40%',
-      background :'rgba(0,0,0,0)',
+      background :'rgba(0,0,0,0.7)',
+      color:'white',
       position: 'absolute',
       overflowX : 'hidden',
       overflowY : 'hidden',
@@ -49,6 +51,8 @@ const InventoryBag = (props) => {
     const [tokenId, setTokenId] = useState(null)
     const [acc, setAcc] = useState(null)
     const [allTokens, setAllTokens] = useState([])
+    
+   
     let subtitle;
 
     const [loading, setLoading] = useState(true)
@@ -71,9 +75,10 @@ const InventoryBag = (props) => {
     
       
 
-    function openModal(e, description, valid, tokenId ) {
+    async function openModal(e, description, valid, tokenId,user ) {
         e.preventDefault()
         console.log("hello")
+        
           setIsOpen(true);
           setText(description)
           setValid(valid)
@@ -169,12 +174,35 @@ const InventoryBag = (props) => {
     }
 
       
-      function handleClick(e){
+      async function handleClick(e){
         e.preventDefault()
-        if(props.handleUse){
-            props.handleUse(tokenId, acc)
-            
+        const body = {
+            tokenId:tokenId,
+            tokenValidCount:valid,
+            user:acc
         }
+        console.log(body)
+        if(tokenId !== null){
+            const res =  await axios.post('http://localhost:5000/check/checkUsedToken', body, {
+                        withCredentials: true
+                      })
+
+            const isValid = res.data.isValid;
+            console.log("isValid",isValid)
+        
+            if(isValid){
+                if(props.handleUse){
+                    props.handleUse(tokenId, acc)
+                    
+                }
+            }
+            else{
+                alert("This token usage has been exhausted")
+                closeModal();
+            }
+           
+        }
+       
         getData()
         
       }
@@ -258,7 +286,7 @@ const InventoryBag = (props) => {
                             
                             <div className="inventory-bag">
                                 {ipfsData.map(hintCard => (
-                                <div key={hintCard.tokenId} className="hint-card" onClick={(event) => {openModal(event, hintCard.description, hintCard.valid, hintCard.tokenId)}}>
+                                <div key={hintCard.tokenId} className="hint-card" onClick={(event) => {openModal(event, hintCard.description, hintCard.valid, hintCard.tokenId,acc)}}>
                                     {hintCard.title}
                                     
                                     

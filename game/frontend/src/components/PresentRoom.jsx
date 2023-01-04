@@ -48,7 +48,7 @@ const PresentRoom = ({ username,room,backgroundImage, lockers, onAddItemToBag,on
 
 
 
-    const handleUse = (e, tokenId, owner ) => {
+    const handleUse = (tokenId, owner ) => {
       console.log('tokenId: ', tokenId)
     console.log('owner: ', owner)
     
@@ -60,14 +60,26 @@ const PresentRoom = ({ username,room,backgroundImage, lockers, onAddItemToBag,on
 
 
       if(isLockerOpen === true){
-        setHint('Choose the correct key from the lockers. Get this information from the Future player')
+        const newHint = 'Choose the correct key from the lockers. Get this information from the Future player';
+        if(hint===newHint){
+          return;
+        }
+        setHint(newHint)
       }
       else if(isLockerOpen === false && laptopCorrect === true){
         console.log('hi')
-        setHint('Type in the correct locker password to unlock them. Get the cipher text from Future player')
+        const newHint = 'Type in the correct locker password to unlock them. Get the cipher text from Future player';
+        if(hint===newHint){
+          return;
+        }
+        setHint(newHint)
       }
       else if(laptopCorrect === false ){
-        setHint('Use the password given in a diary in the Future side.')
+        const newHint = 'Use the password given in a diary in the Future side.';
+        if(hint===newHint){
+          return;
+        }
+        setHint(newHint)
       }
     
     if(tokenId !== null && owner !== null){

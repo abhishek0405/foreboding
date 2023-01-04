@@ -14,7 +14,7 @@ import Chat from "./Chat";
 import SocketContext from "./SocketContext";
 import NFTABI from '../contracts/NFTABI.json'
 import {ethers} from "ethers"
-
+import "../components/PresentRoomStyles.css"
 import {Web3Storage} from 'web3.storage'
 
 const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -75,7 +75,7 @@ function DangerRoom () {
     const [isVirusDestroyed, setVirusDestroyed] = useState(false)
     const [hint, setHint] = useState('Hint')
 
-    const expectedOrder = ['red', 'blue', 'green'];
+    const expectedOrder = ['red', 'green', 'blue'];
     let droppedChemicals = 0;
 
 
@@ -103,7 +103,11 @@ function DangerRoom () {
       console.log('tokenId: ', tokenId)
       console.log('owner: ', owner)
       if(isVirusDestroyed === false){
-        setHint('select the flasks and put them in your bag. pour in correct order on the virus.')
+        const newHint = 'select the flasks and put them in your bag. pour in correct order on the virus.';
+        if(hint===newHint){
+          return;
+        }
+        setHint(newHint)
       }
       var d = {}
         d.tokenId = tokenId
@@ -395,7 +399,11 @@ WebkitUserSelect: "none"}} >
                contentLabel="Example Modal"
                className={'bg-discount-gradient'}
            >
-           <h1>Incorrect order!</h1>
+            <div style={{width:"300px",height:"200px",color:'white',backgroundColor:'rgba(0,0,0,0.7)'}}>
+            
+           <h1 style={{position:"absolute",top:"25%",left:"25%"}}>Incorrect order!</h1>
+          
+           </div>
             </Modal>
 
 
@@ -407,7 +415,15 @@ WebkitUserSelect: "none"}} >
                contentLabel="Example Modal"
                className={'bg-discount-gradient'}
            >
-           <h1>Congratulations! you have saved the world!</h1>
+             <div style={{width:"300px",height:"200px",color:'white',backgroundColor:'rgba(0,0,0,0.7)'}}>
+            
+            <h1> 
+              
+              Congratulations !!! <p> You have saved the world!
+                </p></h1>
+           
+            </div>
+          
            {success}
             </Modal>
 
